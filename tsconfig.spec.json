@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "removeComments": true,
+        "outDir": "testing",
+        "target": "es2015",
+        "experimentalDecorators": true
+    },
+    "include": [
+        "test/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ],
+    "formatCodeOptions": {
+        "indentSize": 2,
+        "tabSize": 2
+    }
+  }
