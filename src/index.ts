@@ -53,6 +53,11 @@ class NewDisp extends Dispatcher<number, Operation> {
   private op2(@dispatcher() inputParam1: string) {
     console.log(`in op2, ${inputParam1}`)    
   }
+
+  @dispatcher()
+  private defaultOp(@dispatcher() inputParam1: string, @dispatcher() inputParam2: string) {
+    console.log(`in defaultOp, ${inputParam1}, ${inputParam2}`)        
+  }
 }
 
 let nd = new NewDisp()
@@ -64,4 +69,10 @@ nd.dispatch({
 nd.dispatch({
   opCode:2,
   inputParam1: 'asdfghjkl'
+})
+
+nd.dispatch({
+  opCode: 100,
+  inputParam1: '123456',
+  inputParam2: 'abcdef',
 })

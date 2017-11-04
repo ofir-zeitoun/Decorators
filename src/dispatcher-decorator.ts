@@ -28,9 +28,16 @@ class DispatcherDecorator<TKey, TDisp> extends DecoratorBase {
 
 export abstract class Dispatcher<TKey, TDisp> {
 
-  dispatch(obj: TDisp) {
-    const key = this.getKey(obj)
-    this[getDispatcherName(key)](obj)
+  dispatch(obj: TDisp) : any {
+    const keyAndDefaultKey = [this.getKey(obj), null]
+    for (let key of keyAndDefaultKey) {
+      let func = this[getDispatcherName(key)]
+      if (func) {
+        return func.call(this, obj)
+      }
+    }
+    
+    throw new Error(`cannot invoke ${JSON.stringify(obj, null, 2)}`)
   }
 
   protected abstract getKey(obj: TDisp) : TKey 
