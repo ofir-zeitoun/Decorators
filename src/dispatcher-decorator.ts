@@ -33,7 +33,7 @@ export abstract class Dispatcher<TKey, TDisp> {
     this[getDispatcherName(key)](obj)
   }
 
-  abstract getKey(obj: TDisp) : TKey 
+  protected abstract getKey(obj: TDisp) : TKey 
 
-  abstract getParamByName(name: string, obj: TDisp) : any 
+  protected abstract getParamByName(name: string, obj: TDisp) : any 
 }

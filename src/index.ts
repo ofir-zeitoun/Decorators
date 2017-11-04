@@ -36,11 +36,11 @@ om.callOperation({
 @dispatcher<number, Operation>()
 class NewDisp extends Dispatcher<number, Operation> {
   
-  getKey(obj: Operation): number {
+  protected getKey(obj: Operation): number {
     return obj.opCode
   }
   
-  getParamByName(name: string, obj: Operation) {
+  protected getParamByName(name: string, obj: Operation) {
     return obj[name]
   }
 

@@ -5,7 +5,7 @@
       "sourceMap": true,
       "removeComments": true,
       "outDir": "dist",
-      "target": "es2015",
+      "target": "es2017",
       "experimentalDecorators": true
   },
   "include": [
