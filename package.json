@@ -3,6 +3,7 @@
     "version": "0.0.1",
     "description": "decorators-demo",
     "main": "dist/index.js",
+    //"main": "dist/usage/usage.js",
     "directories": {
       "test": "test"
     },
@@ -13,7 +14,9 @@
       "test": "npm run clean:tests && tsc -p tsconfig.spec.json && cross-env NODE_ENV=test mocha --opts ./mocha.opts",
       "test:coverage": "npm run clean:tests && tsc -p tsconfig.spec.json && cross-env NODE_ENV=test nyc mocha --opts ./mocha.opts"
     },
-
+    "repository": {
+      "url": "https://github.com/ofir-zeitoun/Decorators.git"
+    },
     "license": "UNLICENSED",
     "devDependencies": {
       "@types/chai": "^4.0.4",

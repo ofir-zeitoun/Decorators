@@ -5,7 +5,8 @@ export class DecoratorBase {
   
   public decoratingClass : any
   public decoratingMethod : DecoratingMethodType
-  public decoratorArguments : any[] = []
+  public decoratingMethodMetadata : Function
+  private decoratorArguments : any[] = []
 
   constructor() {
 
@@ -26,7 +27,7 @@ export class DecoratorBase {
 
   public decorateParams(...inputArgs : any[]) {
     const decoratorThis = this
-    decoratorThis.decoratorArguments = inputArgs
+    decoratorThis.decoratorArguments.push(...inputArgs)
     return function(this: any, ...args: any[]): any {
       return decoratorThis.decorate(args)
     }
@@ -54,7 +55,7 @@ export class DecoratorBase {
     return obj.hasOwnProperty('get') || obj.hasOwnProperty('set')
   }  
 
-  private getMetadataKey(key: string) {
+  public getMetadataKey(key: string) {
     return `${this.constructor.name}_${key}_parameters`
   }
 
@@ -85,11 +86,16 @@ export class DecoratorBase {
   }
 
   private methodHandler(target: Function, key: string, descriptor: PropertyDescriptor) {
-    if (!this.decoratingMethod)
-    return descriptor
     
     const decoratorThis = this
     const metadataKey = decoratorThis.getMetadataKey(key)
+    if (this.decoratingMethodMetadata) {
+      this.decoratingMethodMetadata(target, key, this.decoratorArguments)
+    }
+
+    if (!this.decoratingMethod)
+      return descriptor
+
     return {
       value: function (this: any, ...args: any[]) {
 
