@@ -33,7 +33,7 @@ om.callOperation({
   inputParam2: 'qazedc'
 })
 
-@dispatcher<number, Operation>()
+@dispatcher()
 class NewDisp extends Dispatcher<number, Operation> {
   
   protected getKey(obj: Operation): number {

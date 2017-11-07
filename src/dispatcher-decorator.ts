@@ -11,7 +11,7 @@ function getDispatcherName(key:any) {
 class DispatcherDecorator<TKey, TDisp> extends DecoratorBase {
   constructor() {
     super()
-    this.decoratingClass = Dispatcher;
+    this.decoratingClass = Dispatcher
     this.decoratingMethodMetadata = this.addMethodToDispatch
   }
 
