@@ -1,16 +1,16 @@
-export type InputParameter = {index:number, name:string, value:any}
+export type InputParameter = {index:number, name:string, value:any, args:any[]}
 export type DecoratingMethodType = (key: string, invoker : Function, ...args:InputParameter[]) => void
+
+const VoidDecoratingMethod : DecoratingMethodType = (key: string, invoker : Function, ...args:InputParameter[]) => {} 
+const doNothing = () => {}
 
 export class DecoratorBase {
   
   public decoratingClass : any
-  public decoratingMethod : DecoratingMethodType
-  public decoratingMethodMetadata : Function
+  public decoratingMethod : DecoratingMethodType = VoidDecoratingMethod
+  public decoratingMethodMetadata : Function = VoidDecoratingMethod
   private decoratorArguments : any[] = []
 
-  constructor() {
-
-  }
 
   public decorate(args : any[]) : any {
     let handler : Function
@@ -87,14 +87,14 @@ export class DecoratorBase {
 
   private methodHandler(target: Function, key: string, descriptor: PropertyDescriptor) {
     
+    this.decoratingMethodMetadata(target, key, this.decoratorArguments)
+    
+    if (this.decoratingMethod === VoidDecoratingMethod) {
+      return descriptor
+    }
+    
     const decoratorThis = this
     const metadataKey = decoratorThis.getMetadataKey(key)
-    if (this.decoratingMethodMetadata) {
-      this.decoratingMethodMetadata(target, key, this.decoratorArguments)
-    }
-
-    if (!this.decoratingMethod)
-      return descriptor
 
     return {
       value: function (this: any, ...args: any[]) {
@@ -121,21 +121,26 @@ export class DecoratorBase {
   private methodParameterHandler(target: any, key: string, index: number) {
     const metadataKey = this.getMetadataKey(key)
     const params = target[key].toString().match(/\(.*\)/)[0].replace(/\(|\)/g, '').split(/\s*,\s*/g)
-    const param = { index, name: params[index] }
+    const param = { index, name: params[index], args: this.decoratorArguments }
     if (!Array.isArray(target[metadataKey])) {
       target[metadataKey] = []
     }
     target[metadataKey].unshift(param)
   }
 
-  private memberHandler(target: any, key: string) {
+  private memberHandler(target: any, key: string) {    
     let memberWrapper = target[key]
 
+    const decoratorThis = this
+
     const getter = function () {
+      decoratorThis.decoratingMethod.apply(this, [key, doNothing])
       return memberWrapper
     }
 
     const setter = function (value: any) {
+      let p: InputParameter = { index: 0, name: 'value', value, args: decoratorThis.decoratorArguments }
+      decoratorThis.decoratingMethod.apply(this, [key, doNothing, p])
       memberWrapper = value
     }
 
@@ -152,12 +157,15 @@ export class DecoratorBase {
 
   // property with get / set
   private accessorHandler(target: any, key: string, descriptor: PropertyDescriptor) {
+    const decoratorThis = this
+    
     // copy descriptor
     let newDescriptor: any = Object.assign({}, descriptor)
 
     if (descriptor.hasOwnProperty('get')) {
       const originGetter = <Function>descriptor.get
       const getter = function (this: any) {
+        decoratorThis.decoratingMethod.apply(this, [key, doNothing])
         return originGetter.call(this)
       }
       newDescriptor.get = getter
@@ -166,6 +174,8 @@ export class DecoratorBase {
     if (descriptor.hasOwnProperty('set')) {
       const originSetter = <Function>descriptor.set
       const setter = function (this: any, value: any) {
+        let p: InputParameter = { index: 0, name: 'value', value, args: decoratorThis.decoratorArguments }
+        decoratorThis.decoratingMethod.apply(this, [key, doNothing, p])
         originSetter.call(this, value)
       }
       newDescriptor.set = setter

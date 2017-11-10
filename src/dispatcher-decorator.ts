@@ -1,4 +1,4 @@
-import { DecoratorBase } from './decorator-base'
+import { DecoratorBase, InputParameter } from './decorator-base'
 
 export function dispatcher<TKey, TDisp>(key: TKey|null = null) {
   let disp = new DispatcherDecorator<TKey, TDisp>()
@@ -19,7 +19,7 @@ class DispatcherDecorator<TKey, TDisp> extends DecoratorBase {
     const args = target[this.getMetadataKey(methodName)] || []
     
     target.constructor.prototype[getDispatcherName(keys[0])] = function(dispatched: TDisp) {
-      const params = args.map(p=>this.getParamByName(p.name, dispatched))
+      const params = args.map(p=>this.getParamFromDispatched(p, dispatched))
       this[methodName].call(this, ...params)
     }
   }
@@ -42,5 +42,5 @@ export abstract class Dispatcher<TKey, TDisp> {
 
   protected abstract getKey(obj: TDisp) : TKey 
 
-  protected abstract getParamByName(name: string, obj: TDisp) : any 
+  protected abstract getParamFromDispatched(meta: InputParameter, dispatched: TDisp) : any 
 }

@@ -1,37 +1,16 @@
 import { DecoratorBase, InputParameter, DecoratingMethodType } from './decorator-base'
-import { opCode, OprationInvoker, Operation } from './usage/opcodes';
 import { dispatcher, Dispatcher } from './dispatcher-decorator';
 export { DecoratorBase, InputParameter, DecoratingMethodType }
 
 
-@opCode()
-export class OperationsModule {
-  
-  @opCode(123)
-  private operationNumber123(@opCode() inputParam1: string) {
-    console.log(`param1: ${inputParam1}`)
-  }
 
-  @opCode(456)
-  private anotherTest(@opCode() inputParam2: string) {
-    console.log(`param1: ${inputParam2}`)
-    
-  }
+// T
+export class Operation {
+  opCode: number
+
+  inputParam1?: string
+  inputParam2?: string
 }
-
-export interface OperationsModule extends OprationInvoker {}
-
-let om = new OperationsModule()
-
-om.callOperation({
-  opCode: 123,
-  inputParam1: '1234567890'
-})
-
-om.callOperation({
-  opCode: 456,
-  inputParam2: 'qazedc'
-})
 
 @dispatcher()
 class NewDisp extends Dispatcher<number, Operation> {
@@ -40,8 +19,8 @@ class NewDisp extends Dispatcher<number, Operation> {
     return obj.opCode
   }
   
-  protected getParamByName(name: string, obj: Operation) {
-    return obj[name]
+  protected getParamFromDispatched(meta: InputParameter, obj: Operation) {
+    return obj[meta.name]
   }
 
   @dispatcher(1)
@@ -55,8 +34,20 @@ class NewDisp extends Dispatcher<number, Operation> {
   }
 
   @dispatcher()
-  private defaultOp(@dispatcher() inputParam1: string, @dispatcher() inputParam2: string) {
+  private defaultOp(@dispatcher(1003) inputParam1: string, @dispatcher() inputParam2: string) {
     console.log(`in defaultOp, ${inputParam1}, ${inputParam2}`)        
+  }
+
+  @dispatcher(1000)
+  temp: number
+
+  private _bar:boolean = false
+  @dispatcher(123)
+  get bar():boolean {
+      return this._bar
+  }
+  set bar(theBar:boolean) {
+      this._bar = theBar
   }
 }
 
@@ -76,3 +67,10 @@ nd.dispatch({
   inputParam1: '123456',
   inputParam2: 'abcdef',
 })
+
+nd.temp = 10002
+console.log(nd.temp)
+
+nd.bar = true
+console.log(nd.bar)
+
