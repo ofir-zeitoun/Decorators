@@ -1,5 +1,10 @@
 import { DecoratorBase, InputParameter } from './decorator-base'
 
+export function log(...args: any[]): any {
+  let decorator = new LoggerDecorator()
+  return decorator.decorate(args)
+}
+
 export class LoggerDecorator extends DecoratorBase {
   constructor() {
     super()

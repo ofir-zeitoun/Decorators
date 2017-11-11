@@ -1,7 +1,7 @@
 import { DecoratorBase, InputParameter, DecoratingMethodType } from './decorator-base'
 import { dispatcher, Dispatcher } from './dispatcher-decorator';
 export { DecoratorBase, InputParameter, DecoratingMethodType }
-import { LoggerDecorator, Logger } from './logger-decorator';
+import { LoggerDecorator, Logger, log } from './logger-decorator';
 
 
 // T
@@ -90,23 +90,14 @@ function testWithParameter(par:number = 0) {
 //   // }
 // }
 
-function test(this: any, ...args: any[]): any {
+function test(...args: any[]): any {
   let decorator = new DecoratorBase()
-  decorator.decoratingClass = OldLogger
+  //decorator.decoratingClass = OldLogger
   decorator.decoratingMethod = function(key: string, invoke : Function, ...input: InputParameter[]) {
     console.log(`in decoratingMethod ${key}`)
     invoke()
   }
   return decorator.decorate(args)
-}
-
-function log(this: any, ...args: any[]): any {
-  let decorator = new LoggerDecorator()
-  return decorator.decorate(args)
-}
-
-export function as<T>(obj: any): T {
-  return <T>(obj)
 }
 
 class OldLogger {
@@ -125,7 +116,7 @@ class Demo {
   @test
   run(@testWithParameter(123456) x: number, @log @test text: string) {
     console.log(`x: ${x}, text: ${text}`)
-    as<OldLogger>(this).log("in run")
+    this.log(0, "in run")
     this.logDebug('in run')
   }
 }
