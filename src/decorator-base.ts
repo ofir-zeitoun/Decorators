@@ -1,14 +1,13 @@
 export type InputParameter = {index:number, name:string, value:any, args:any[]}
 export type DecoratingMethodType = (key: string, invoker : Function, ...args:InputParameter[]) => void
-
-const VoidDecoratingMethod : DecoratingMethodType = (key: string, invoker : Function, ...args:InputParameter[]) => {} 
+export type DecoratingMetaMethodType = (target: Function, key: string, methodParameters: InputParameter[], decoratorArgs: any[]) => void
 const doNothing = () => {}
 
 export class DecoratorBase {
   
   public decoratingClass : any
-  public decoratingMethod : DecoratingMethodType = VoidDecoratingMethod
-  public decoratingMethodMetadata : Function = VoidDecoratingMethod
+  public decoratingMethod : DecoratingMethodType = doNothing
+  public decoratingMethodMetadata : DecoratingMetaMethodType = doNothing
   private decoratorArguments : any[] = []
 
 
@@ -55,7 +54,7 @@ export class DecoratorBase {
     return obj.hasOwnProperty('get') || obj.hasOwnProperty('set')
   }  
 
-  public getMetadataKey(key: string) {
+  private getMetadataKey(key: string) {
     return `${this.constructor.name}_${key}_parameters`
   }
 
@@ -87,14 +86,15 @@ export class DecoratorBase {
 
   private methodHandler(target: Function, key: string, descriptor: PropertyDescriptor) {
     
-    this.decoratingMethodMetadata(target, key, this.decoratorArguments)
+    const metadataKey = this.getMetadataKey(key)
+    const input = target[metadataKey] || []
+    this.decoratingMethodMetadata(target, key, input, this.decoratorArguments)
     
-    if (this.decoratingMethod === VoidDecoratingMethod) {
+    if (this.decoratingMethod === doNothing) {
       return descriptor
     }
     
     const decoratorThis = this
-    const metadataKey = decoratorThis.getMetadataKey(key)
 
     return {
       value: function (this: any, ...args: any[]) {

@@ -15,8 +15,7 @@ class DispatcherDecorator<TKey, TDisp> extends DecoratorBase {
     this.decoratingMethodMetadata = this.addMethodToDispatch
   }
 
-  addMethodToDispatch(target: Function, methodName: string, keys: TKey[]) {
-    const args = target[this.getMetadataKey(methodName)] || []
+  addMethodToDispatch(target: Function, methodName: string, args : InputParameter[], keys: TKey[]) {
     
     target.constructor.prototype[getDispatcherName(keys[0])] = function(dispatched: TDisp) {
       const params = args.map(p=>this.getParamFromDispatched(p, dispatched))

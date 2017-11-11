@@ -1,4 +1,4 @@
-import { DecoratorBase, InputParameter } from '.././decorator-base'
+import { DecoratorBase, InputParameter } from './decorator-base'
 
 export class LoggerDecorator extends DecoratorBase {
   constructor() {
