@@ -165,7 +165,7 @@ export class DecoratorBase {
     if (descriptor.hasOwnProperty('get')) {
       const originGetter = <Function>descriptor.get
       const getter = function (this: any) {
-        decoratorThis.decoratingMethod.apply(this, [key, doNothing])
+        decoratorThis.decoratingMethod.apply(this, [key, doNothing, []])
         return originGetter.call(this)
       }
       newDescriptor.get = getter
