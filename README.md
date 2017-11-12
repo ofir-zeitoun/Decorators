@@ -5,15 +5,16 @@ With this class you can decorate classes, methods, members and accessors (proper
 ## API
 
 ```typescript
-class DecoratorBase - wraps up all work on decorators
+class DecoratorBase { // wraps up all work on decorators
   // public members
-  decoratingClass - class to merge on the decorated class
-  decoratingMethod : DecoratingMethodType - method to wrap decorated method
-  decoratingMethodMetadata : DecoratingMetaMethodType - method to get metadata on decorated method
+  decoratingClass : any //  class to merge on the decorated class
+  decoratingMethod : DecoratingMethodType // method to wrap decorated method
+  decoratingMethodMetadata : DecoratingMetaMethodType // method to get metadata on decorated method
 
   // public methods
-  decorate(args : any[]) - used to decorate without parameters
-  decorateParams(...inputArgs : any[]) - used to decorate with parameter
+  decorate(args : any[]) // used to decorate without parameters
+  decorateParams(...inputArgs : any[]) // used to decorate with parameter
+}
 ```
 
 ## Usage
