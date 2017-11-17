@@ -3,7 +3,6 @@
     "version": "0.0.1",
     "description": "decorators-demo",
     "main": "dist/index.js",
-    //"main": "dist/usage/usage.js",
     "directories": {
       "test": "test"
     },

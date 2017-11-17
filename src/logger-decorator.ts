@@ -1,27 +1,5 @@
 import { DecoratorBase, InputParameter } from './decorator-base'
 
-export function log(...args: any[]): any {
-  let decorator = new LoggerDecorator()
-  return decorator.decorate(args)
-}
-
-export class LoggerDecorator extends DecoratorBase {
-  constructor() {
-    super()
-    this.decoratingClass = ConsoleLogger
-    this.decoratingMethod = this.wrapMethod
-  }
-
-  wrapMethod(key: string, invoker : Function, ...args:InputParameter[]){
-    this.logSilly(`before calling ${key} with parameters: ${JSON.stringify(args, null, 2)}`)
-    invoker()
-  }
-
-}
-
-// for using log methods
-export interface LoggerDecorator extends Logger {}
-
 export interface Logger {
   log(loglevel: number, message: string) : void
   logDebug(message: string) : void
@@ -41,4 +19,15 @@ class ConsoleLogger implements Logger{
   logSilly(message: string): void {
     this.log(6, message)
   }
+}
+
+const loggerDecorator = new DecoratorBase()
+loggerDecorator.decoratingClass = ConsoleLogger
+loggerDecorator.decoratingMethod = function(key: string, invoker : Function, ...args:InputParameter[]) {
+  this.logSilly(`before calling ${key} with parameters: ${JSON.stringify(args, null, 2)}`)
+  invoker()
+}
+
+export function log(...args: any[]): any {
+  return loggerDecorator.decorate(args)
 }
