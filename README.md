@@ -70,11 +70,11 @@ class Logger {
   }
 
   logWarn(message: string) {
-    this.log(1: message)
+    this.log(1, message)
   }
 
   logError(message: string) {
-    this.log(2: message)
+    this.log(2, message)
   }
 }
 ```
