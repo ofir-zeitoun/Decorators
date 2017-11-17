@@ -1,15 +1,17 @@
 # Decorators
-Decorators utilities for seperate decorators logic form infrastructure logic.
+These decorators classes helps you focus on your logic and hides the issues regarding decorators.
+
 
 With this class you can decorate classes, methods, members and accessors (properties with get and or set).
 ## API
 
 ```typescript
-class DecoratorBase { // wraps up all work on decorators
+// wraps up all work on decorators
+class DecoratorBase { 
   // public members
-  decoratingClass : any //  class to merge on the decorated class
-  decoratingMethod : DecoratingMethodType // method to wrap decorated method
-  decoratingMethodMetadata : DecoratingMetaMethodType // method to get metadata on decorated method
+  decoratingClass : any //  class to merge with the decorated class
+  decoratingMethod : DecoratingMethodType // method that wraps the decorated method, called when calling the decorated metod
+  decoratingMethodMetadata : DecoratingMetaMethodType // method to get metadata on decorated method, called once when accessing the class
 
   // public methods
   decorate(args : any[]) // used to decorate without parameters
@@ -21,7 +23,7 @@ class DecoratorBase { // wraps up all work on decorators
 
 To wrap method with extra behavior you can use DecoratorBase:
 
-to add console log to methods, here is how:
+This is how to add log on methods
 
 ```typescript
 // this is the decorator
@@ -35,23 +37,26 @@ function log(...args: any[]): any {
 }
 ```
 
-Now let's decorate a method:
+Now let's decorate a method and call it
 ```typescript
 class Test {
   @log
-  call1() {
-    console.log('call1')
+  foo() {
+    console.log('foo')
   }
 }
+
+let t = new Test()
+t.call1()
 ```
 
-We'll get:
+output will be
 ```
-calling call1 in decoratingMethod
-call1
+calling foo in decoratingMethod
+foo
 ```
 
-Now we'll add log functionality to Test class:
+Here is how to add log functionality to Test class
 
 First, we'll declare a class that will have the logging functionality
 ```typescript
@@ -85,29 +90,29 @@ function log(...args: any[]): any {
   return decorator.decorate(args)
 }
 ```
-Now for ease of use, we'll merge types:
+For ease of use, we'll merge types:
 
 ```typescript
 interface Test extends Logger {}
 ```
 
-Now let's decorate Test class:
+Now let's decorate Test class (merge it with Logger):
 ```typescript
 @log //this line adds the Logger functionality
 class Test {
   @log
-  call1() {
-    console.log('call1')
-    this.logDebug('debugging call1')
+  foo() {
+    console.log('foo')
+    this.logDebug('debugging foo')
   }
 }
 ```
 
 We'll get:
 ```
-calling call1 in decoratingMethod
-call1
-debugging call1
+calling foo in decoratingMethod
+foo
+debugging foo
 ```
 
 ## to be continued...
