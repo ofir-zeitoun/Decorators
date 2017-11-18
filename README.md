@@ -21,7 +21,7 @@ class DecoratorBase {
 
 ## Usage
 
-To wrap method with extra behavior you can use DecoratorBase:
+### To wrap method with extra behavior you can use DecoratorBase:
 
 This is how to add log on methods
 
@@ -56,7 +56,7 @@ calling foo in decoratingMethod
 foo
 ```
 
-Here is how to add log functionality to Test class
+### Here is how to add log functionality to Test class
 
 First, we'll declare a class that will have the logging functionality
 ```typescript
@@ -90,7 +90,7 @@ function log(...args: any[]): any {
   return decorator.decorate(args)
 }
 ```
-For ease of use, we'll merge types:
+For ease of use (and 'compile time' error), we'll merge types:
 
 ```typescript
 interface Test extends Logger {}
@@ -98,7 +98,7 @@ interface Test extends Logger {}
 
 Now let's decorate Test class (merge it with Logger):
 ```typescript
-@log //this line adds the Logger functionality
+@log
 class Test {
   @log
   foo() {
