@@ -1,40 +1,40 @@
 import { DecoratorBase, InputParameter, DecoratingMethodType } from './decorator-base'
-import { dispatcher, Dispatcher } from './dispatcher-decorator';
 export { DecoratorBase, InputParameter, DecoratingMethodType }
+import { dispatcher, Dispatcher } from './dispatcher-decorator';
 import { Logger, log } from './logger-decorator';
 
 
 // T
-export class Operation {
-  opCode: number
+class Action {
+  id: number
 
   inputParam1?: string
   inputParam2?: string
 }
 
-@dispatcher()
-class NewDisp extends Dispatcher<number, Operation> {
+//@dispatcher()
+class ActionDispatcher extends Dispatcher<number, Action> {
   
-  protected getKey(obj: Operation): number {
-    return obj.opCode
+  protected getKey(obj: Action): number {
+    return obj.id
   }
   
-  protected getParamFromDispatched(meta: InputParameter, obj: Operation) {
+  protected getParamFromDispatched(meta: InputParameter, obj: Action) {
     return obj[meta.name]
   }
 
   @dispatcher(1)
-  private op1() {
+  private action1() {
     console.log(`in op1`)
   }
 
   @dispatcher(2)
-  private op2(@dispatcher() inputParam1: string) {
+  private action2(@dispatcher() inputParam1: string) {
     console.log(`in op2, ${inputParam1}`)    
   }
 
   @dispatcher()
-  private defaultOp(@dispatcher(1003) inputParam1: string, @dispatcher() inputParam2: string) {
+  private defaultAction(@dispatcher(1003) inputParam1: string, @dispatcher() inputParam2: string) {
     console.log(`in defaultOp, ${inputParam1}, ${inputParam2}`)        
   }
 
@@ -51,28 +51,28 @@ class NewDisp extends Dispatcher<number, Operation> {
   }
 }
 
-let nd = new NewDisp()
+let ad = new ActionDispatcher()
 
-nd.dispatch({
-  opCode:1
+ad.dispatch({
+  id:1
 })
 
-nd.dispatch({
-  opCode:2,
+ad.dispatch({
+  id:2,
   inputParam1: 'asdfghjkl'
 })
 
-nd.dispatch({
-  opCode: 100,
+ad.dispatch({
+  id: 100,
   inputParam1: '123456',
   inputParam2: 'abcdef',
 })
 
-nd.temp = 10002
-console.log(nd.temp)
+ad.temp = 10002
+console.log(ad.temp)
 
-nd.bar = true
-console.log(nd.bar)
+ad.bar = true
+console.log(ad.bar)
 
 
 
