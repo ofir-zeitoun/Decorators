@@ -54,7 +54,7 @@ class Test {
 }
 
 let t = new Test()
-t.call1()
+t.foo()
 ```
 
 output will be
