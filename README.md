@@ -199,4 +199,8 @@ in action1
 in action2, value2
 in defaultAction, value101, value102
 ```
+
+duration decorator
+
+
 ## to be continued...
