@@ -1,0 +1,12 @@
+# IDE
+.vs
+.vscode
+
+# Build
+dist
+
+src/usage
+dist/usage
+node_modules
+test
+testing

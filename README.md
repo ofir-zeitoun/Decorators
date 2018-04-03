@@ -1,6 +1,10 @@
 # Decorators
 These decorators classes helps you focus on your logic and hides the issues regarding decorators.
 
+----
+# I will update readme.md soon...
+
+----
 
 With this class you can decorate classes, methods, members and accessors (properties with get and or set).
 * [API](#api)

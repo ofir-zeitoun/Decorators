@@ -6,7 +6,7 @@
       "removeComments": true,
       "outDir": "dist",
       "target": "es2017",
-      "experimentalDecorators": true
+      "experimentalDecorators": true  
   },
   "include": [
       "src/**/*"
