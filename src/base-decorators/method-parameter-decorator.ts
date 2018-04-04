@@ -1,21 +1,43 @@
 import { BaseDecorator, InputParameter } from "./base-decorator"
 
-function getMetadataKey(key: string) {
-  return `__${key}-parameters`
+let _parametersNames = new Map<string, string[]>()
+let _parameters = new Map<string, InputParameter[]>()
+
+function getParameterKey(target: any, methodName: string) {
+  return `${target.constructor.name}-${methodName}`
+}
+function getParametersNames(target: any, methodName: string) : string[] {
+  const paramKey = getParameterKey(target, methodName)
+  let res = _parametersNames.get(paramKey)
+  if (!res) {
+    res = target[methodName].toString().match(/\((.*)\)/)[1].split(/\s*,\s*/g)
+    _parametersNames.set(paramKey, res)
+  }
+  return res  
 }
 
+function updateParameters(target: any, methodName: string, param: InputParameter) {
+  const paramKey = getParameterKey(target, methodName)
+  let res = _parameters.get(paramKey)
+  if (!res) {
+    res = []
+    _parameters.set(paramKey, res)
+  }
+  res.unshift(param)
+}
+
+function getParameters(target: any, methodName: string): InputParameter[] {
+  const paramKey = getParameterKey(target, methodName)
+  return _parameters.get(paramKey) || []
+}
 export class MethodParameterDecorator implements BaseDecorator {
   
   decorate(target: any, methodName: string, index: number) {
-    const metadataKey = getMetadataKey(methodName)
-    const names = `${metadataKey}-names`
-    let params = target[names] || 
-        (target[names] = target[methodName].toString().match(/\((.*)\)/)[1].split(/\s*,\s*/g))
-    const param = { index, name: params[index] }
-    if (!Array.isArray(target[metadataKey])) {
-      target[metadataKey] = []
-    }
-    target[metadataKey].unshift(param)
+    let paramNames = getParametersNames(target, methodName)
+    const param = { index, name: paramNames[index], value: undefined }
+    
+    updateParameters(target, methodName, param)
+
     this.onParamMetaData(param.name, methodName, index)
   }
 
@@ -25,13 +47,10 @@ export class MethodParameterDecorator implements BaseDecorator {
 }
 
 export function getDecoratedValuedParams(target: any, methodName: string, ...args: any[]): InputParameter[] {
-  const metadataKey = getMetadataKey(methodName)
-  const $params = target[metadataKey]
-  let decoratedValuedParams = args.map((v, i)=> {return {value:v, index:i }})
-  if (Array.isArray($params)) {
-    for (let decoratedParam of $params) {
-      decoratedValuedParams[decoratedParam.index] = Object.assign({}, decoratedParam, decoratedValuedParams[decoratedParam.index])
-    }
+  const $params = getParameters(target, methodName)
+  let decoratedValuedParams = args.map((value, index)=> {return { value, index }})
+  for (let decoratedParam of $params) {
+    decoratedValuedParams[decoratedParam.index] = Object.assign({}, decoratedParam, decoratedValuedParams[decoratedParam.index])
   }
   return decoratedValuedParams
 }

@@ -53,24 +53,6 @@ describe('DispatcherDecorator', function () {
     expect(t).to.have.property('__disp__undefined__')
   })
 
-  it('paramDispatcher should add arrays: parameters & parameters-names', function() {
-    expect(t).to.deep.property('__action2-parameters-names', [
-      'inputParam1',
-    ])
-    expect(t).to.deep.property('__defaultAction-parameters-names', [
-      'inputParam1', 
-      'inputParam2',
-    ])
-
-    expect(t).to.deep.property('__action2-parameters', [
-      { index: 0, name: 'inputParam1' },
-    ])
-    expect(t).to.deep.property('__defaultAction-parameters', [
-      { index: 0, name: 'inputParam1' },
-      { index: 1, name: 'inputParam2' },
-    ])
-  })
-
   it('action1 sould be called', function () {
     let res = t.dispatch({ id: 1 })
     expect(res).to.be.equal('action1')
