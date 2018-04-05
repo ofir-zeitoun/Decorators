@@ -1,6 +1,6 @@
 {
   "name": "oz-decorators",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "These decorators classes helps you focus on your logic and hides the issues regarding decorators",
   "main": "dist/index.js",
   "directories": {
