@@ -1,7 +1,7 @@
 {
   "name": "oz-decorators",
   "version": "0.0.3",
-  "description": "decorators infrustructure",
+  "description": "These decorators classes helps you focus on your logic and hides the issues regarding decorators",
   "main": "dist/index.js",
   "directories": {
     "test": "test"
@@ -41,5 +41,15 @@
       "text-summary"
     ]
   },
-  "dependencies": {}
+  "dependencies": {},
+  "keywords": [
+    "Decorator",
+    "Decorators",
+    "decorate",
+    "wrap",
+    "wraping",
+    "AOP",
+    "Behavior",
+    "OZ"
+  ]
 }
