@@ -6,6 +6,7 @@ let _parameters = new Map<string, InputParameter[]>()
 function getParameterKey(target: any, methodName: string) {
   return `${target.constructor.name}-${methodName}`
 }
+
 function getParametersNames(target: any, methodName: string) : string[] {
   const paramKey = getParameterKey(target, methodName)
   let res = _parametersNames.get(paramKey)

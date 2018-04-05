@@ -1,5 +1,5 @@
 import decorate from './decorate'
-import { BaseDecorator, InputParameter, Constructor, AbstractConstructor } from './base-decorators/base-decorator'
+import { InputParameter, Constructor, AbstractConstructor } from './base-decorators/base-decorator'
 import { WrapingMethodHandler, DecoratingMethodHandler } from "./base-decorators/method-decorator"
 import { AccessorDecorator } from './base-decorators/accessor-decorator'
 import ClassDecorator from './base-decorators/class-decorator'
@@ -10,7 +10,7 @@ import { ClassMixinDecorator } from './decorator-examples/class-mixin-decorator'
 import { Dispatcher, classDispacher, methodDispatcher, paramDispatcher } from './decorator-examples/dispatcher-decorator'
 
 export { decorate }
-export { BaseDecorator, InputParameter, Constructor, AbstractConstructor } 
+export { InputParameter, Constructor, AbstractConstructor } 
 export { WrapingMethodHandler, DecoratingMethodHandler } 
 export { AccessorDecorator } 
 export { ClassDecorator } 
